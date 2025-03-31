@@ -26,7 +26,7 @@ Backend: Java, Spring Boot, Spring Security, Spring Data JPA
 
 Database: MySQL
 
-Frontend: HTML, CSS, JavaScript
+Frontend: HTML
 
 PDF Generation: iText Library
 
