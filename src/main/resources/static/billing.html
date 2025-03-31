@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Billing</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+<div class="container">
+  <h2>Generate Bill</h2>
+
+  <input id="patient" class="form-control my-2" placeholder="Patient Name" />
+  <input id="doctor" class="form-control my-2" placeholder="Doctor Name" />
+  <input id="treatment" class="form-control my-2" placeholder="Treatment Description" />
+  <input id="amount" type="number" class="form-control my-2" placeholder="Amount" />
+  <input id="date" type="date" class="form-control my-2" />
+  <button onclick="createBill()" class="btn btn-warning">Create Bill</button>
+
+  <h4 class="mt-4">All Bills</h4>
+  <ul id="billList" class="list-group"></ul>
+</div>
+
+<script>
+  function createBill() {
+    fetch('/api/billing', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        patientName: document.getElementById("patient").value,
+        doctorName: document.getElementById("doctor").value,
+        treatmentDescription: document.getElementById("treatment").value,
+        amount: parseFloat(document.getElementById("amount").value),
+        billingDate: document.getElementById("date").value
+      })
+    }).then(() => loadBills());
+  }
+
+  function loadBills() {
+    fetch('/api/billing')
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById("billList");
+        list.innerHTML = '';
+        data.forEach(b => {
+          list.innerHTML += `<li class="list-group-item">${b.patientName} | ₹${b.amount} | ${b.billingDate} | ${b.treatmentDescription}</li>`;
+        });
+      });
+  }
+
+  loadBills();
+</script>
+<button onclick="window.location.href='/api/billing/export/pdf'">Export as PDF</button>
+</body>
+</html>

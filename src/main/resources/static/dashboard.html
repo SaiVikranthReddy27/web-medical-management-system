@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+<div class="container">
+  <h2>Dashboard</h2>
+  <input type="text" id="user" placeholder="Enter name" class="form-control my-2" />
+  <select id="role" class="form-select mb-2">
+    <option value="doctor">Doctor</option>
+    <option value="patient">Patient</option>
+  </select>
+  <button onclick="loadDashboard()" class="btn btn-primary">Load</button>
+
+  <h4 class="mt-4">Appointments</h4>
+  <ul id="appointments" class="list-group mb-3"></ul>
+
+  <h4>Medical Records</h4>
+  <ul id="records" class="list-group"></ul>
+</div>
+
+<script>
+  function loadDashboard() {
+    const name = document.getElementById("user").value;
+    const role = document.getElementById("role").value;
+    fetch(`/api/dashboard/${role}/${name}`)
+      .then(res => res.json())
+      .then(data => {
+        const appts = document.getElementById("appointments");
+        const recs = document.getElementById("records");
+        appts.innerHTML = recs.innerHTML = '';
+
+        data.appointments.forEach(a => {
+          appts.innerHTML += `<li class='list-group-item'>${a.patientName} - ${a.doctorName} (${a.date})</li>`;
+        });
+
+        data.medicalRecords.forEach(r => {
+          recs.innerHTML += `<li class='list-group-item'>${r.diagnosis} - ${r.prescription}</li>`;
+        });
+      });
+  }
+</script>
+</body>
+</html>

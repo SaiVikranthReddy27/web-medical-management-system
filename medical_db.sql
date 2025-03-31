@@ -1,0 +1,11 @@
+
+CREATE DATABASE IF NOT EXISTS medical_db;
+USE medical_db;
+
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
+    role VARCHAR(50)
+);
